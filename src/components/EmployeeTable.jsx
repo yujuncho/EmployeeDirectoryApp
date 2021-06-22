@@ -35,9 +35,17 @@ export default function EmployeeTable({ searchValue }) {
 
   const employeeListSorted = employeeListFiltered.sort((a, b) => {
     if (isAscending) {
-      return a.name.first > b.name.first;
+      if (a.name.first > b.name.first) {
+        return 1;
+      } else {
+        return -1;
+      }
     } else {
-      return a.name.first < b.name.first;
+      if (a.name.first < b.name.first) {
+        return 1;
+      } else {
+        return -1;
+      }
     }
   });
 
