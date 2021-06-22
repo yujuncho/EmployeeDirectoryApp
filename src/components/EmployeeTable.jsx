@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 
+import styles from "./EmployeeTable.module.css";
+
 export default function EmployeeTable({ searchValue }) {
   const [employeeList, setEmployeeList] = useState([]);
+  const [isAscending, setIsAscending] = useState(true);
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -26,33 +29,50 @@ export default function EmployeeTable({ searchValue }) {
     );
   };
 
-  const employeeRows = employeeList.flatMap(employee => {
-    if (matchEmployeeToSearch(employee)) {
-      return [
-        <tr key={employee.login.uuid}>
-          <td>
-            <img
-              src={employee.picture.thumbnail}
-              alt={`${employee.name.first} ${employee.name.last}`}
-            />
-          </td>
-          <td>{employee.name.first}</td>
-          <td>{employee.name.last}</td>
-          <td>{employee.phone}</td>
-          <td>{employee.email}</td>
-        </tr>
-      ];
+  const employeeListFiltered = employeeList.filter(employee => {
+    return matchEmployeeToSearch(employee);
+  });
+
+  const employeeListSorted = employeeListFiltered.sort((a, b) => {
+    if (isAscending) {
+      return a.name.first > b.name.first;
     } else {
-      return [];
+      return a.name.first < b.name.first;
     }
   });
+
+  const employeeRows = employeeListSorted.map(employee => {
+    return (
+      <tr key={employee.login.uuid}>
+        <td>
+          <img
+            src={employee.picture.thumbnail}
+            alt={`${employee.name.first} ${employee.name.last}`}
+          />
+        </td>
+        <td>{employee.name.first}</td>
+        <td>{employee.name.last}</td>
+        <td>{employee.phone}</td>
+        <td>{employee.email}</td>
+      </tr>
+    );
+  });
+
+  const sortHandler = () => {
+    setIsAscending(prev => !prev);
+  };
 
   return (
     <Table className={`p-0 bg-light`} bordered>
       <thead>
         <tr>
           <th>Picture</th>
-          <th>First Name</th>
+          <th
+            className={styles["table-header__clickable"]}
+            onClick={sortHandler}
+          >
+            First Name {isAscending ? "↑" : "↓"}
+          </th>
           <th>Last Name</th>
           <th>Phone</th>
           <th>Email</th>
