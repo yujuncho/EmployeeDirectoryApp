@@ -71,31 +71,33 @@ export default function EmployeeTable({ searchValue }) {
   };
 
   return (
-    <Table className={`p-0 bg-light`} bordered>
-      <thead>
-        <tr>
-          <th>Picture</th>
-          <th
-            className={styles["table-header__clickable"]}
-            onClick={sortHandler}
-          >
-            First Name {isAscending ? "↑" : "↓"}
-          </th>
-          <th>Last Name</th>
-          <th>Phone</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        {employeeRows}
-        {employeeRows.length === 0 && (
+    <div className="table-responsive bg-light border-left border-right border-bottom">
+      <Table>
+        <thead>
           <tr>
-            <th className="text-center py-5" colSpan="5">
-              No employees found
+            <th>Picture</th>
+            <th
+              className={styles["table-header__clickable"]}
+              onClick={sortHandler}
+            >
+              First name {isAscending ? "↑" : "↓"}
             </th>
+            <th>Last name</th>
+            <th>Phone</th>
+            <th>Email</th>
           </tr>
-        )}
-      </tbody>
-    </Table>
+        </thead>
+        <tbody>
+          {employeeRows}
+          {employeeRows.length === 0 && (
+            <tr>
+              <th className="text-center py-5" colSpan="5">
+                No employees found
+              </th>
+            </tr>
+          )}
+        </tbody>
+      </Table>
+    </div>
   );
 }
